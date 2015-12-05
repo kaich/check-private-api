@@ -135,10 +135,6 @@
         [[NSUserDefaults standardUserDefaults] setObject:self.tfName.text forKey:USER_NAME];
     }
     
-    NSString *  str = @"LHn0y+BOAjupna2eyQxx/M7yaWIReTrF/469yd4i4aihr+Qw76BkYc2dZKv055e4PW1Y+IPBaS5+DTkuD+h3WENP59ghl26jl56YyBK29iLCJTmZdX5VS9RAU/CfcBPOPmE0KXeb+Z7ZYJOBN7rWB8BXPJzoC1VB4oIB9YKKLl5u65wvdfZ1lRW2dAO9kknQSEdxQ/Jv0u3In+2zmDuQQysggPgiE0K+J00M0e6Re/BUCyzzmybrwkX/iSrt6KqmhqfRLXsTXpR1DkhLvtsrf0eanJp0qsvEJ6mWE6qcOKxvc3SCFkxcqIdMQBJt3k2RVKqs3bHMPzgvozHKxXj41ab7LRoe44pgY+8gXpFxdVfFZcnBEyHVZ4axfpMW4ZuMS57yCYqZR1g=";
-    str = [str stringByRemovingPercentEncoding];
-    NSString * result = [DesUtil decryptUseDES:str key:@"#231e34"];
-    
 }
 
 
@@ -212,21 +208,25 @@
             
             if(bs)
             {
-                self.callResults  = [NSMutableDictionary dictionary];
-                for (NSString * method in self.apiInformation.callMethods) {
-                    SEL callSelector = NSSelectorFromString(method);
-                    if([bs respondsToSelector:callSelector])
-                    {
-                        id result = [bs performSelectorSafely:callSelector];
+                @try {
+                    
+                    self.callResults  = [NSMutableDictionary dictionary];
+                    for (NSString * method in self.apiInformation.callMethods) {
+                        
+                        id result = [self callMethod:method target:bs];
                         result = [NSString stringWithFormat:@"%@",result];
                         [self.callResults setObject:result forKey:method];
+                        
                     }
-                    else
-                    {
-                        [self.callResults setObject:@"不支持该方法" forKey:method];
-                    }
+                    [self.tableView reloadData];
+                    
                 }
-                [self.tableView reloadData];
+                @catch (NSException *exception) {
+                    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"提示" message:exception.description delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                    [alert show];
+                }
+              
+                
             }
 #pragma clang diagnostic pop
         }
@@ -241,6 +241,110 @@
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"无法打开该类库" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [alert show];
     }
+}
+
+-(id) callMethod:(NSString *) method target:(id) target
+{
+    NSError * error = nil;
+    NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:@":(\\((.*?)\\)(.+?))[\\s|;]" options:NSRegularExpressionCaseInsensitive error:&error];
+    
+    NSArray *matches = [regex matchesInString:method
+                                      options:0
+                                        range:NSMakeRange(0, [method length])];
+    
+    NSMutableArray * params = [NSMutableArray array];
+    for (NSTextCheckingResult *match in matches) {
+        NSRange paramTypeRange = [match rangeAtIndex:2];
+        NSRange paramValueRange = [match rangeAtIndex:3];
+        
+        NSString * paramType = [method substringWithRange:paramTypeRange];
+        NSString * paramValue = [method substringWithRange:paramValueRange];
+       
+        
+        NSDictionary * paramInformation = @{@"type":paramType, @"value": paramValue };
+        [params addObject: paramInformation];
+    }
+    
+    NSString * methodSelectorString = [regex stringByReplacingMatchesInString:method options:0 range:NSMakeRange(0, method.length) withTemplate:@":"];
+    NSInteger index = [methodSelectorString rangeOfString:@")"].location;
+    NSRange returnDeclareRange = NSMakeRange(0, index+1);
+    methodSelectorString = [methodSelectorString stringByReplacingCharactersInRange:returnDeclareRange withString:@""];
+    methodSelectorString = [methodSelectorString stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    SEL methodSelector = NSSelectorFromString(methodSelectorString);
+    
+    return [self invokeMethod:methodSelector target:target params:params];
+    
+}
+
+-(id) invokeMethod:(SEL) selector  target:(id) target params:(NSArray*) params
+{
+    if([target respondsToSelector:selector])
+    {
+        NSMethodSignature *methodSignature = [[target class] instanceMethodSignatureForSelector:selector];
+        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSignature];
+        [invocation setTarget:target];
+        [invocation setSelector:selector];
+       
+        //设置参数
+        for (NSDictionary * paramDic in params) {
+           void * arg ;
+            arg = [self getValueWithParamInfo:paramDic];
+           [invocation setArgument:arg atIndex:2];
+        }
+        
+        id result = nil;
+        [invocation invoke];
+        [invocation getReturnValue:&result];
+        
+        return result;
+    }
+    else
+    {
+       return @"不支持该方法";
+    }
+    
+    return nil;
+}
+
+-(void *) getValueWithParamInfo:(NSDictionary *) paramDic
+{
+    void * arg ;
+    NSString * type = paramDic[@"type"];
+    NSString * value = paramDic[@"value"];
+    
+    if ([type isEqualToString: @"int"]) {
+        arg = (__bridge void *)(@([value intValue]));
+    }
+    else if([type isEqualToString:@"NSInteger"])
+    {
+        arg = (__bridge void *)(@([value integerValue]));
+    }
+    else if([type isEqualToString:@"float"] || [type isEqualToString:@"CGFloat"])
+    {
+        arg = (__bridge void *)(@([value floatValue]));
+    }
+    else if([type isEqualToString:@"double"])
+    {
+        arg = (__bridge void *)(@([value doubleValue]));
+    }
+    else if([type isEqualToString:@"long long"])
+    {
+        arg = (__bridge void *)(@([value longLongValue]));
+    }
+    else if([type isEqualToString:@"NSArray"] || [type isEqualToString:@"NSMutableArray"] || [type isEqualToString:@"NSDictionary"] || [type isEqualToString:@"NSMutableDictionary"] || [value hasPrefix:@"["] || [value hasPrefix:@"{"])
+    {
+        NSData * jsonData = [value dataUsingEncoding:NSUTF8StringEncoding];
+        NSError * error = nil;
+        id jsonObject = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableLeaves error:&error];
+        arg = (__bridge void *)(jsonObject);
+    }
+    else
+    {
+        arg = (__bridge void *)(value);
+    }
+    
+    return  arg;
 }
 
 
