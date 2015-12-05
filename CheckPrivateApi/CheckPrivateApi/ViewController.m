@@ -266,14 +266,12 @@
     }
     
     NSString * methodSelectorString = [regex stringByReplacingMatchesInString:method options:0 range:NSMakeRange(0, method.length) withTemplate:@":"];
-    NSInteger index = [methodSelectorString rangeOfString:@")"].location;
-    NSRange returnDeclareRange = NSMakeRange(0, index+1);
-    methodSelectorString = [methodSelectorString stringByReplacingCharactersInRange:returnDeclareRange withString:@""];
     methodSelectorString = [methodSelectorString stringByReplacingOccurrencesOfString:@" " withString:@""];
     
     SEL methodSelector = NSSelectorFromString(methodSelectorString);
     
-    return [self invokeMethod:methodSelector target:target params:params];
+    id result = [self invokeMethod:methodSelector target:target params:params];
+    return  result;
     
 }
 
@@ -293,11 +291,11 @@
            [invocation setArgument:arg atIndex:2];
         }
         
-        id result = nil;
+        void * result = nil;
         [invocation invoke];
         [invocation getReturnValue:&result];
         
-        return result;
+        return (__bridge id)(result);
     }
     else
     {
