@@ -1,0 +1,2 @@
+module CheckApiHelper
+end

@@ -1,0 +1,43 @@
+<div class="col-md-8 col-md-offset-2">
+
+  <% flash.each do |message_type, message| %>
+    <div class="alert alert-success ">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <%= message %>
+    </div>
+  <% end %>
+
+  
+  <%= form_for @user ,url: @user.name.blank? ? check_api_index_path : check_api_path(@user) do |f| %>
+
+   <div class="form-group">
+     <%= f.label :name ,'名称' %> 
+     <%= f.text_field :name ,class:"form-control"%>
+   </div>
+
+   <div class="form-group">
+     <%= f.label :class_path, '类路径' %>
+     <%= f.text_field :class_path ,class:"form-control"%>
+   </div>
+
+   <div class="form-group">
+     <%= f.label :class_name, '类名称' %>
+     <%= f.text_field :class_name ,class:"form-control" %>
+   </div>
+
+   <div class="form-group">
+     <%= f.label :init_method, '初始化方法' %>
+     <%= f.text_field :init_method ,class:"form-control"%>
+   </div> 
+
+
+   <div class="form-group">
+     <%= f.label :call_methods, '调用方法' %>
+     <%= f.text_area :call_methods , class:"form-control" , rows: "5" %>
+   </div>
+
+   <%= f.submit '提交', :disable_with => 'ing...', class:"btn btn-primary col-md-4 col-md-offset-4" %>
+
+  <% end %>
+
+</div>
