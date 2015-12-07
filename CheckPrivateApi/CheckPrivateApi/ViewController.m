@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #include <dlfcn.h>
 #import "DesUtil.h"
+#import <objc/runtime.h>
 
 #define USER_NAME       @"user name"
 #define IP_ADDRESS      @"ip address"
@@ -285,17 +286,24 @@
         [invocation setSelector:selector];
        
         //设置参数
+        NSInteger paramIndex = 0;
         for (NSDictionary * paramDic in params) {
            void * arg ;
-            arg = [self getValueWithParamInfo:paramDic];
-           [invocation setArgument:arg atIndex:2];
+           arg = [self getValueWithParamInfo:paramDic];
+           [invocation setArgument:arg atIndex:2 + paramIndex];
+           paramIndex ++;
         }
         
         void * result = nil;
         [invocation invoke];
         [invocation getReturnValue:&result];
         
-        return (__bridge id)(result);
+        Method method = class_getInstanceMethod([target class] , selector);
+        char returnType[ 256 ];
+        method_getReturnType(method, returnType, 256 );
+        
+        id  finalResult =  [self getObjectFromTypeEncoding:returnType data:result];
+        return finalResult;
     }
     else
     {
@@ -303,6 +311,41 @@
     }
     
     return nil;
+}
+
+-(id) getObjectFromTypeEncoding:(char *) retType data:(void *) data
+{
+    if(data == NULL)
+    {
+        return  nil;
+    }
+    else if(strcmp(retType, @encode(id)) == 0 || strcmp(retType, @encode(void)) == 0){
+        return (__bridge id)(data);
+    }
+    else if(strcmp(retType, "i") == 0 || strcmp(retType, "I") == 0 || strcmp(retType, "s") == 0 || strcmp(retType, "S") == 0 || strcmp(retType, "c") == 0 || strcmp(retType, "C") == 0)
+    {
+        NSInteger result = (NSInteger) data;
+        return [NSString stringWithFormat:@"%d",result];
+    }
+    else if(strcmp(retType, "f") == 0 || strcmp(retType, "d") == 0)
+    {
+        CGFloat* result = (CGFloat *) data;
+        return [NSString stringWithFormat:@"%f",*result];
+    }
+    else if(strcmp(retType, "L") == 0  || strcmp(retType, "l") == 0)
+    {
+        long  result = (long ) data;
+        return [NSString stringWithFormat:@"%ld",result];
+    }
+    else if(strcmp(retType, "Q") == 0 ||  strcmp(retType, "q") == 0)
+    {
+        long long result = (long long) data;
+        return [NSString stringWithFormat:@"%lld",result];
+    }
+    else
+    {
+        return nil;
+    }
 }
 
 -(void *) getValueWithParamInfo:(NSDictionary *) paramDic
