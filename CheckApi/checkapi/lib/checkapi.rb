@@ -24,7 +24,10 @@ module Checkapi
       keywords ||= {}
 
       if keywords.count > 0
-       system("brew install ag") if which("ag").nil?
+       if which("ag").nil?
+         system("brew update")
+         system("brew install ag")
+       end
        regex = keywords[0]
        if keywords.count > 1
 
@@ -32,25 +35,29 @@ module Checkapi
 
           index = keywords.index keyword 
           if index == 0 
-            regex = "[#{keyword}"
+            regex = "#{keyword}"
           elsif
-            regex += "|#{keyword}" 
+            regex += "[\\s\\S]*#{keyword}" 
           end
     
          end
 
-         regex += "]"
        end
 
+       if File.exist? "CheckApiResult.txt" 
+         system 'rm CheckApiResult.txt'
+       end
+       system "ag -C 200 \"#{regex}\" --heading --nonumbers > CheckApiResult.txt"
 
-       system 'rm CheckApiResult.txt'
-       system "ag -C 200 #{regex} -H --nonumbers > CheckApiResult.txt"
+       puts "open CheckApiResult.txt to view result!"
 
       else
 
         file_name = options[:filename]
         if file_name 
-         system 'rm CheckApiResult.txt'
+         if File.exist? "CheckApiResult.txt" 
+           system 'rm CheckApiResult.txt'
+         end
          result_path = "#{Pathname.pwd}/CheckApiResult.txt"
          result_file = File.new(result_path , "w+")
          file_list_string = `find . -name *#{file_name}*` 
