@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>72F69BD2-A4AD-40A4-ADAB-3BF393469899</string>
+	<key>IDESourceControlProjectName</key>
+	<string>CheckPrivateApi</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>C11003C7E9C7EA79A01835571F3E92314F665C38</key>
+		<string>https://bitbucket.org/chengkai1853/check-private-api.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>CheckPrivateApi/CheckPrivateApi.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>C11003C7E9C7EA79A01835571F3E92314F665C38</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://bitbucket.org/chengkai1853/check-private-api.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>C11003C7E9C7EA79A01835571F3E92314F665C38</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>C11003C7E9C7EA79A01835571F3E92314F665C38</string>
+			<key>IDESourceControlWCCName</key>
+			<string>CheckPrivateApi</string>
+		</dict>
+	</array>
+</dict>
+</plist>

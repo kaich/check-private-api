@@ -73,6 +73,7 @@ module Checkapi
            end
          end
          result_file.close
+         puts "open CheckApiResult.txt to view result!"
         end
 
       end

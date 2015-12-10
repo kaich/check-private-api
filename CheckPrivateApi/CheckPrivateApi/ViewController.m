@@ -148,7 +148,7 @@
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     
-    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *  data, NSURLResponse *  response, NSError *  error) {
        dispatch_async(dispatch_get_main_queue(), ^(void) {
             if(!error)
             {
@@ -302,6 +302,11 @@
         char returnType[ 256 ];
         method_getReturnType(method, returnType, 256 );
         
+        if(strcmp(returnType, "v") == 0)
+        {
+            return  nil;
+        }
+        
         id  finalResult =  [self getObjectFromTypeEncoding:returnType data:result];
         return finalResult;
     }
@@ -325,7 +330,7 @@
     else if(strcmp(retType, "i") == 0 || strcmp(retType, "I") == 0 || strcmp(retType, "s") == 0 || strcmp(retType, "S") == 0 || strcmp(retType, "c") == 0 || strcmp(retType, "C") == 0)
     {
         NSInteger result = (NSInteger) data;
-        return [NSString stringWithFormat:@"%d",result];
+        return [NSString stringWithFormat:@"%ld",(long)result];
     }
     else if(strcmp(retType, "f") == 0 || strcmp(retType, "d") == 0)
     {
