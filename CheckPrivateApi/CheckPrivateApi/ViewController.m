@@ -333,7 +333,7 @@
     }
     else if(strcmp(retType, "f") == 0 || strcmp(retType, "d") == 0)
     {
-        CGFloat* result = (CGFloat *) data;
+        CGFloat* result = (CGFloat*) &data;
         return [NSString stringWithFormat:@"%f",*result];
     }
     else if(strcmp(retType, "L") == 0  || strcmp(retType, "l") == 0)
