@@ -8,7 +8,6 @@
 
 #import "ViewController.h"
 #include <dlfcn.h>
-#import "DesUtil.h"
 #import <objc/runtime.h>
 
 #define USER_NAME       @"user name"

@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		048BC1FE1C1191AA009BF94F /* DesUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 048BC1FD1C1191AA009BF94F /* DesUtil.m */; settings = {ASSET_TAGS = (); }; };
-		048BC2011C1191F5009BF94F /* ConverUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 048BC2001C1191F5009BF94F /* ConverUtil.m */; settings = {ASSET_TAGS = (); }; };
 		04A34C5F1C0EEEB4001AAA7F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A34C5E1C0EEEB4001AAA7F /* main.m */; };
 		04A34C621C0EEEB4001AAA7F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A34C611C0EEEB4001AAA7F /* AppDelegate.m */; };
 		04A34C651C0EEEB4001AAA7F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A34C641C0EEEB4001AAA7F /* ViewController.m */; };
@@ -37,10 +35,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		048BC1FC1C1191AA009BF94F /* DesUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DesUtil.h; sourceTree = "<group>"; };
-		048BC1FD1C1191AA009BF94F /* DesUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesUtil.m; sourceTree = "<group>"; };
-		048BC1FF1C1191F5009BF94F /* ConverUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConverUtil.h; sourceTree = "<group>"; };
-		048BC2001C1191F5009BF94F /* ConverUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConverUtil.m; sourceTree = "<group>"; };
 		04A34C5A1C0EEEB4001AAA7F /* CheckPrivateApi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CheckPrivateApi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		04A34C5E1C0EEEB4001AAA7F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		04A34C601C0EEEB4001AAA7F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -116,10 +110,6 @@
 				04A34C6B1C0EEEB4001AAA7F /* LaunchScreen.storyboard */,
 				04A34C6E1C0EEEB4001AAA7F /* Info.plist */,
 				04A34C5D1C0EEEB4001AAA7F /* Supporting Files */,
-				048BC1FC1C1191AA009BF94F /* DesUtil.h */,
-				048BC1FD1C1191AA009BF94F /* DesUtil.m */,
-				048BC1FF1C1191F5009BF94F /* ConverUtil.h */,
-				048BC2001C1191F5009BF94F /* ConverUtil.m */,
 			);
 			path = CheckPrivateApi;
 			sourceTree = "<group>";
@@ -282,9 +272,7 @@
 			files = (
 				04A34C651C0EEEB4001AAA7F /* ViewController.m in Sources */,
 				04A34C621C0EEEB4001AAA7F /* AppDelegate.m in Sources */,
-				048BC1FE1C1191AA009BF94F /* DesUtil.m in Sources */,
 				04A34C5F1C0EEEB4001AAA7F /* main.m in Sources */,
-				048BC2011C1191F5009BF94F /* ConverUtil.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
