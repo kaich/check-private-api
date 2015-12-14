@@ -1,3 +1,4 @@
+
 <div class="col-md-8 col-md-offset-2">
 
   <% flash.each do |message_type, message| %>
@@ -38,6 +39,8 @@
 
    <%= f.submit '提交', :disable_with => 'ing...', class:"btn btn-primary col-md-4 col-md-offset-4" %>
 
+   <%= link_to "查看上传的查询记录" , api_results_path ,class:"btn btn-primary col-md-4 col-md-offset-4" %>
   <% end %>
 
 </div>
+   

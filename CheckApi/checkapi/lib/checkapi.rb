@@ -1,6 +1,9 @@
 require "checkapi/version"
 require 'optparse'
 require 'pathname'
+require 'net/http'
+require 'uri'
+require 'json'
 
 module Checkapi
   # Your code goes here...
@@ -15,6 +18,10 @@ module Checkapi
 
         opts.on('-k A,B', '--keyword A,B', Array, 'List of search keywords') do |value|
           options[:keywords] = value
+        end
+
+        opts.on('-p USERNAME', '--push USERNAME', 'push record to server') do |value|
+          options[:push] = value
         end
 
       end.parse!
@@ -44,21 +51,21 @@ module Checkapi
 
        end
 
-       if File.exist? "CheckApiResult.txt" 
-         system 'rm CheckApiResult.txt'
+       if File.exist? "CheckApiResult.h" 
+         system 'rm CheckApiResult.h'
        end
-       system "ag -C 200 \"#{regex}\" --heading --nonumbers > CheckApiResult.txt"
+       system "ag -C 200 \"#{regex}\" --heading --nonumbers > CheckApiResult.h"
 
-       puts "open CheckApiResult.txt to view result!"
+       puts "open CheckApiResult.h to view result!"
 
       else
 
         file_name = options[:filename]
         if file_name 
-         if File.exist? "CheckApiResult.txt" 
-           system 'rm CheckApiResult.txt'
+         if File.exist? "CheckApiResult.h" 
+           system 'rm CheckApiResult.h'
          end
-         result_path = "#{Pathname.pwd}/CheckApiResult.txt"
+         result_path = "#{Pathname.pwd}/CheckApiResult.h"
          result_file = File.new(result_path , "w+")
          file_list_string = `find . -name *#{file_name}*` 
          file_list_string.each_line do |file_path|
@@ -73,13 +80,29 @@ module Checkapi
            end
          end
          result_file.close
-         puts "open CheckApiResult.txt to view result!"
+         puts "open CheckApiResult.h to view result!"
         end
 
       end
 
+      user_name = options[:push]
+      if user_name
+        params = {}
+        api_result = {}
+        api_result[:title] = options.to_s
+        api_result[:content] = File.read("CheckApiResult.h")
+        params[:api_result] = api_result
+        params[:name] =  user_name
+        uri = URI.parse("http://192.168.1.153:3000/api_results")
+        http = Net::HTTP.new(uri.host, uri.port)
+        request = Net::HTTP::Post.new(uri.path, {'Content-Type' =>'application/json'})
+        request.body = params.to_json
+        response = http.request(request)
+      end
+
   end
 
+  
 
   def self.which(cmd)
     exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']

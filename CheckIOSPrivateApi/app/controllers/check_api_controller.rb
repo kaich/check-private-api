@@ -6,6 +6,8 @@ class CheckApiController < ApplicationController
 
   def create
     @user = User.find_by(name:user_params[:name])
+    session[:name] = @user.name if @user
+
     if @user
       redirect_to edit_check_api_path(@user)
     else

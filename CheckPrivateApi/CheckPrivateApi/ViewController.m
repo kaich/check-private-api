@@ -277,11 +277,27 @@
 
 -(id) invokeMethod:(SEL) selector  target:(id) target params:(NSArray*) params
 {
-    if([target respondsToSelector:selector])
+    if([target respondsToSelector:selector] ||[[target class] respondsToSelector:selector] )
     {
+        BOOL isClassMethod = NO;
         NSMethodSignature *methodSignature = [[target class] instanceMethodSignatureForSelector:selector];
+        if(!methodSignature)
+        {
+            methodSignature = [[target class] methodSignatureForSelector:selector];
+            if(methodSignature)
+            {
+                isClassMethod = YES;
+            }
+        }
         NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSignature];
-        [invocation setTarget:target];
+        if(isClassMethod)
+        {
+            [invocation setTarget:[target class]];
+        }
+        else
+        {
+            [invocation setTarget:target];
+        }
         [invocation setSelector:selector];
        
         //设置参数
@@ -323,7 +339,7 @@
     {
         return  nil;
     }
-    else if(strcmp(retType, @encode(id)) == 0 || strcmp(retType, @encode(void)) == 0){
+    else if(strcmp(retType, @encode(id)) == 0 || strcmp(retType, @encode(void)) == 0 || strcmp(retType, "") == 0){
         return (__bridge id)(data);
     }
     else if(strcmp(retType, "i") == 0 || strcmp(retType, "I") == 0 || strcmp(retType, "s") == 0 || strcmp(retType, "S") == 0 || strcmp(retType, "c") == 0 || strcmp(retType, "C") == 0)

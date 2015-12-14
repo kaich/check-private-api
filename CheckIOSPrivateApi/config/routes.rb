@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root 'check_api#new'
 
   resources :check_api
+  resources :api_results
 
   get 'api_info' , to: "check_api#api_info"
 
