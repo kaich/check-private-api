@@ -228,6 +228,11 @@
               
                 
             }
+            else
+            {
+                UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"初始化方法取得实例为空" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [alert show];
+            }
 #pragma clang diagnostic pop
         }
         else
@@ -309,17 +314,20 @@
            paramIndex ++;
         }
         
-        void * result = nil;
-        [invocation invoke];
-        [invocation getReturnValue:&result];
-        
+
         Method method = class_getInstanceMethod([target class] , selector);
         char returnType[ 256 ];
         method_getReturnType(method, returnType, 256 );
         
+        void * result = nil;
         if(strcmp(returnType, "v") == 0)
         {
             return  nil;
+        }
+        else
+        {
+            [invocation invoke];
+            [invocation getReturnValue:&result];
         }
         
         id  finalResult =  [self getObjectFromTypeEncoding:returnType data:result];
