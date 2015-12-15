@@ -408,6 +408,16 @@
         id jsonObject = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableLeaves error:&error];
         arg = (__bridge void *)(jsonObject);
     }
+    else if([type isEqualToString:@"NSNumber"])
+    {
+        NSNumber * numberValue = @([value doubleValue]);
+        arg = (__bridge void *)(numberValue);
+    }
+    else if([type isEqualToString:@"NSURL"])
+    {
+        NSURL * url = [NSURL URLWithString:value];
+        arg = (__bridge void *)(url);
+    }
     else
     {
         arg = (__bridge void *)(value);
