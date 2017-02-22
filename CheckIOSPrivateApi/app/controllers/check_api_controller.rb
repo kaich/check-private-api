@@ -52,9 +52,10 @@ class CheckApiController < ApplicationController
 
   def mobile_api_result
     @api_result = ApiResult.find(params[:id])
-  
+    @api_result.result = mobile_api_params
+
     respond_to do |format|
-      if @api_result.update(mobile_api_params)
+      if @api_result.save
         format.json  { head :ok }
       else
         format.json  { render json: @api_result.errors, status: :unprocessable_entity }
@@ -88,7 +89,7 @@ class CheckApiController < ApplicationController
   end
 
   def mobile_api_params
-      params.require(:check_api)  
+      params[:check_api][:result]
   end
   
 end

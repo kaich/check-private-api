@@ -1,3 +1,3 @@
 class ApiResult < ActiveRecord::Base
-  belongs_to :user
+  serialize :result, JSON
 end
