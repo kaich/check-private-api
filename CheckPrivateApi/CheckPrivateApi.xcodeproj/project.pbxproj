@@ -15,6 +15,7 @@
 		04A34C6A1C0EEEB4001AAA7F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04A34C691C0EEEB4001AAA7F /* Assets.xcassets */; };
 		04A34C781C0EEEB4001AAA7F /* CheckPrivateApiTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A34C771C0EEEB4001AAA7F /* CheckPrivateApiTests.m */; };
 		04A34C831C0EEEB4001AAA7F /* CheckPrivateApiUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A34C821C0EEEB4001AAA7F /* CheckPrivateApiUITests.m */; };
+		409D0E791E5DFC6D000E05BA /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 409D0E781E5DFC6D000E05BA /* AdSupport.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		04A34C7E1C0EEEB4001AAA7F /* CheckPrivateApiUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CheckPrivateApiUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		04A34C821C0EEEB4001AAA7F /* CheckPrivateApiUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CheckPrivateApiUITests.m; sourceTree = "<group>"; };
 		04A34C841C0EEEB4001AAA7F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		409D0E781E5DFC6D000E05BA /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				409D0E791E5DFC6D000E05BA /* AdSupport.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,6 +88,7 @@
 				04A34C761C0EEEB4001AAA7F /* CheckPrivateApiTests */,
 				04A34C811C0EEEB4001AAA7F /* CheckPrivateApiUITests */,
 				04A34C5B1C0EEEB4001AAA7F /* Products */,
+				409D0E771E5DFC6D000E05BA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -138,6 +142,14 @@
 				04A34C841C0EEEB4001AAA7F /* Info.plist */,
 			);
 			path = CheckPrivateApiUITests;
+			sourceTree = "<group>";
+		};
+		409D0E771E5DFC6D000E05BA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				409D0E781E5DFC6D000E05BA /* AdSupport.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

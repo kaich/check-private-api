@@ -52,7 +52,11 @@ class CheckApiController < ApplicationController
 
   def mobile_api_result
     @api_result = ApiResult.find(params[:id])
-    @api_result.result = mobile_api_params
+    @api_result.result = mobile_api_params[:result]
+    @api_result.device_name = mobile_api_params[:device_name]
+    @api_result.device_model = mobile_api_params[:device_model]
+    @api_result.device_os_version = mobile_api_params[:device_os_version]
+    @api_result.device_adfa = mobile_api_params[:device_adfa]
 
     respond_to do |format|
       if @api_result.save
@@ -89,7 +93,7 @@ class CheckApiController < ApplicationController
   end
 
   def mobile_api_params
-      params[:check_api][:result]
+      params[:check_api]
   end
   
 end

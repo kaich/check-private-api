@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #include <dlfcn.h>
 #import <objc/runtime.h>
+#import <AdSupport/AdSupport.h>
 
 #define USER_NAME       @"user name"
 #define IP_ADDRESS      @"ip address"
@@ -147,7 +148,7 @@
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     request.HTTPMethod = @"PATCH";
     
-    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *paramsDic = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *contentDic = [[NSMutableDictionary alloc] init];
     for( NSString * method in self.apiInformation.callMethods)
     {
@@ -157,9 +158,20 @@
             [contentDic setObject:result forKey:method];
         }
     }
-    [resultDic setObject:contentDic forKey:@"result"];
+    
+    NSString * deviceName = [UIDevice currentDevice].name;
+    NSString * deviceModel = [UIDevice currentDevice].model;
+    NSString * deviceOSVersion = [UIDevice currentDevice].systemVersion;
+    NSString * deviceADFA = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
+    
+    [paramsDic setObject:contentDic forKey:@"result"];
+    [paramsDic setObject:deviceName forKey:@"device_name"];
+    [paramsDic setObject:deviceModel forKey:@"device_model"];
+    [paramsDic setObject:deviceOSVersion forKey:@"device_os_version"];
+    [paramsDic setObject:deviceADFA forKey:@"device_adfa"];
+    
     NSError * error = nil;
-    NSData *postData = [NSJSONSerialization dataWithJSONObject:resultDic options:0 error:&error];
+    NSData *postData = [NSJSONSerialization dataWithJSONObject:paramsDic options:0 error:&error];
     [request setHTTPBody:postData];
     
     
