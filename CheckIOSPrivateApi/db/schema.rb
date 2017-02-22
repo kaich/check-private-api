@@ -14,24 +14,14 @@
 ActiveRecord::Schema.define(version: 20151214023004) do
 
   create_table "api_results", force: :cascade do |t|
-    t.string   "title"
-    t.text     "content"
-    t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "users", force: :cascade do |t|
-    t.string   "name"
-    t.string   "token"
+    t.string   "user_name"
     t.string   "class_path"
     t.string   "class_name"
     t.string   "init_method"
     t.string   "call_methods"
+    t.string   "result"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
   end
-
-  add_index "users", ["name"], name: "index_users_on_name", unique: true
 
 end

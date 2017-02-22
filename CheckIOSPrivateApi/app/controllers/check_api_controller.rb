@@ -1,85 +1,94 @@
 class CheckApiController < ApplicationController
 
+  def index
+    @api_results = ApiResult.where(user_name: params[:user_name])
+  
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render xml: @api_resultss }
+    end
+  end
+
   def new
-    @user = User.new
+    @api_result = ApiResult.new
   end
 
   def create
-    @user = User.find_by(name:user_params[:name])
-    session[:name] = @user.name if @user
-
-    if @user
-      redirect_to edit_check_api_path(@user)
-    else
-      @user = User.new(user_params)
-      generate_token
+    @api_result = ApiResult.new(api_params)
       
-      respond_to do |wants|
-        if @user.save
-          flash[:notice] = ' was successfully created.'
-          wants.html { redirect_to(edit_check_api_path(@user)) }
-          wants.xml { render :xml => @user, :status => :created, :location => @user }
-          wants.json { render :json => @user }
-        else
-          wants.html { render :action => "new" }
-          wants.xml { render :xml => @user.errors, :status => :unprocessable_entity }
-          wants.json { render :json => @user.errors }
-        end
+    respond_to do |wants|
+      if @api_result.save
+        flash[:notice] = ' was successfully created.'
+        wants.html { redirect_to(edit_check_api_path(@api_result)) }
+        wants.xml { render :xml => @api_result, :status => :created, :location => @api_result }
+        wants.json { render :json => @api_result }
+      else
+        wants.html { render :action => "new" }
+        wants.xml { render :xml => @api_result.errors, :status => :unprocessable_entity }
+        wants.json { render :json => @api_result.errors }
       end
     end
   end
 
 
   def edit
-    @user = User.find(params[:id])
+    @api_result = ApiResult.find(params[:id])
   end
 
   def update
-    @user = User.find(params[:id])
-    
+    @api_result = ApiResult.find(params[:id])
   
     respond_to do |format|
-      if @user.update(user_params)
+      if @api_result.update(api_params)
         flash[:notice] = ' was successfully updated.'
-        format.html { redirect_to(edit_check_api_path(@user)) }
+        format.html { redirect_to(edit_check_api_path(@api_result)) }
         format.xml  { head :ok }
       else
         format.html { render action: 'edit' }
-        format.xml  { render xml: @user.errors, status: :unprocessable_entity }
+        format.xml  { render xml: @api_result.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def mobile_api_result
+    @api_result = ApiResult.find(params[:id])
+  
+    respond_to do |format|
+      if @api_result.update(mobile_api_params)
+        format.json  { head :ok }
+      else
+        format.json  { render json: @api_result.errors, status: :unprocessable_entity }
       end
     end
   end
 
 
   def show
-    @user = User.find(params[:id])
+    @api_result = User.find(params[:id])
   
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render xml: @user }
-      format.json { render json: @user }
+      format.xml  { render xml: @api_result }
+      format.json { render json: @api_result }
     end
   end
   
   def api_info
-    @user = User.find_by(name:params[:name])
+    @api_result = ApiResult.where(user_name:params[:name]).order(created_at: :desc).first
   
     respond_to do |format|
-      format.json { render json: @user }
+      format.json { render json: @api_result }
     end
   end
 
 
  private
-  def user_params
-      params.require(:user).permit(:name , :class_path , :class_name, :init_method, :call_methods)
+  def api_params
+      params.require(:api_result).permit(:user_name , :class_path , :class_name, :init_method, :call_methods, :result)
   end
 
-  def generate_token
-    @user.token = loop do
-      random_token = SecureRandom.urlsafe_base64(nil, false)
-      break random_token unless User.exists?(token: random_token)
-    end
+  def mobile_api_params
+      params.require(:check_api)  
   end
   
 end

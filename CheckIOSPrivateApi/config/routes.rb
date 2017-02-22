@@ -3,9 +3,9 @@ Rails.application.routes.draw do
   root 'check_api#new'
 
   resources :check_api
-  resources :api_results
 
   get 'api_info' , to: "check_api#api_info"
+  patch 'api_result/:id' , to: "check_api#mobile_api_result"
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

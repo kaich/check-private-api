@@ -1,4 +1,3 @@
-
 <div class="col-md-8 col-md-offset-2">
 
   <% flash.each do |message_type, message| %>
@@ -9,11 +8,11 @@
   <% end %>
 
   
-  <%= form_for @user ,url: @user.name.blank? ? check_api_index_path : check_api_path(@user) do |f| %>
+  <%= form_for @api_result ,url: @api_result.user_name.blank? ? check_api_index_path : check_api_path(@api_result) do |f| %>
 
    <div class="form-group">
-     <%= f.label :name ,'名称' %> 
-     <%= f.text_field :name ,class:"form-control"%>
+     <%= f.label :user_name ,'名称' %> 
+     <%= f.text_field :user_name ,class:"form-control"%>
    </div>
 
    <div class="form-group">
@@ -39,7 +38,7 @@
 
    <%= f.submit '提交', :disable_with => 'ing...', class:"btn btn-primary col-md-4 col-md-offset-4" %>
 
-   <%= link_to "查看上传的查询记录" , api_results_path ,class:"btn btn-primary col-md-4 col-md-offset-4" %>
+   <%= link_to "查看上传的查询记录" , check_api_index_path(:user_name => @api_result.user_name) ,class:"btn btn-primary col-md-4 col-md-offset-4" %>
   <% end %>
 
 </div>

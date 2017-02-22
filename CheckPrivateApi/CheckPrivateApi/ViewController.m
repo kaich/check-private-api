@@ -15,6 +15,7 @@
 #define USER_TOKEN      @"user token"
 
 @interface APIInfromation : NSObject
+@property(nonatomic,strong) NSString * ID;
 @property(nonatomic,strong) NSString * classPath;
 @property(nonatomic,strong) NSString * className;
 @property(nonatomic,strong) NSString * classInitMethod;
@@ -31,11 +32,11 @@
     self = [super init];
     if(self)
     {
+        self.ID = [NSString stringWithFormat:@"%@", json[@"id"]];
         self.classPath = json[@"class_path"];
         self.className = json[@"class_name"];
         self.classInitMethod = json[@"init_method"];
         self.callMethods = [self parseCallMethods:json[@"call_methods"]];
-        
         
     }
     
@@ -137,6 +138,37 @@
     
 }
 
+-(void) uploadResult
+{
+    NSString * getInfoUrlString = [NSString stringWithFormat:@"http://%@:3000/api_result/%@",self.tfIPAddress.text,self.apiInformation.ID];
+    NSURL * requestUrl = [NSURL URLWithString:getInfoUrlString];
+    NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:requestUrl];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    request.HTTPMethod = @"PATCH";
+    
+    NSMutableDictionary *resultDic = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *contentDic = [[NSMutableDictionary alloc] init];
+    for( NSString * method in self.apiInformation.callMethods)
+    {
+        id result = [self.callResults objectForKey:method];
+        if(result)
+        {
+            [contentDic setObject:result forKey:method];
+        }
+    }
+    [resultDic setObject:contentDic forKey:@"result"];
+    NSError * error = nil;
+    NSData *postData = [NSJSONSerialization dataWithJSONObject:resultDic options:0 error:&error];
+    [request setHTTPBody:postData];
+    
+    
+    NSURLSessionDataTask *postDataTask = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        
+    }];
+    
+    [postDataTask resume];
+}
 
 -(void) fetchApiInformation
 {
@@ -183,27 +215,34 @@
     {
         Class targetClass = NSClassFromString(self.apiInformation.className);
         SEL initSelector = NSSelectorFromString(self.apiInformation.classInitMethod);
-        if([targetClass  respondsToSelector:initSelector])
+        if([targetClass  respondsToSelector:initSelector] || self.apiInformation.classInitMethod.length == 0)
         {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
             id bs = nil;
             
-            if([self.apiInformation.classInitMethod hasPrefix:@"init"])
+            if(self.apiInformation.classInitMethod.length != 0)
             {
-                @try {
-                    bs = [[targetClass alloc] performSelector:initSelector];
+                if([self.apiInformation.classInitMethod hasPrefix:@"init"])
+                {
+                    @try {
+                        bs = [[targetClass alloc] performSelector:initSelector];
+                    }
+                    @catch (NSException *exception) {
+                        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"初始化方法错误" message:exception.description delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                        [alert show];
+                        
+                    }
+                   
                 }
-                @catch (NSException *exception) {
-                    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"初始化方法错误" message:exception.description delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-                    [alert show];
-                    
+                else
+                {
+                    bs  = [targetClass performSelector:initSelector];
                 }
-               
             }
             else
             {
-                bs  = [targetClass performSelector:initSelector];
+                bs = targetClass;
             }
             
             if(bs)
@@ -218,6 +257,11 @@
                         [self.callResults setObject:result forKey:method];
                         
                     }
+                    
+                    dispatch_async(dispatch_get_global_queue(0, 0), ^(void) {
+                        [self uploadResult];
+                    });
+
                     [self.tableView reloadData];
                     
                 }

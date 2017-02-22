@@ -1,0 +1,21 @@
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>ClassName</th>
+      <th>initMethod</th>
+      <th>API</th>
+      <th>Result</th>
+    </tr> 
+  </thead>
+  <tbody>
+    <% for api_result in @api_results %>
+      <tr>
+        <td><%= api_result.class_name %></td>
+        <td><%= api_result.init_method %></td>
+        <td><%= api_result.call_methods %></td>
+        <td><%= api_result.result %></td>
+      </tr>
+    <% end %>
+  </tbody>
+
+</table>
