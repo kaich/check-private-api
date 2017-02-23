@@ -1,10 +1,42 @@
+
+<!-- search control -->
+  <%= form_tag check_api_index_path, :method => 'get' do %>
+    <div class="input-group">
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+          <select name="category">
+            <option value="class_name">类名</option>
+            <option value="init_method">初始化方法</option>
+            <option value="call_methods">调用方法</option>
+            <option value="result">结果</option>
+            <option value="device_name">设备名</option>
+            <option value="device_name">设备Model</option>
+            <option value="device_os_version">系统版本</option>
+            <option value="device_adfa">ADFA</option>
+          </select>
+        </ul>
+      </div><!-- /btn-group -->
+      <%= text_field_tag :search, params[:search], class:'form-control', placeholder: "输入要查询的关键字"%>
+      <span class="input-group-btn">
+        <button type="submit" class="btn btn-primary">
+          <i class="fa fa-search"></i>
+        </button>
+      </span>
+    </div>
+  <% end %>
+
 <table class="table table-hover">
   <thead>
     <tr>
-      <th>ClassName</th>
-      <th>initMethod</th>
-      <th>API</th>
-      <th>Result</th>
+      <th>类名</th>
+      <th>初始化方法</th>
+      <th>调用方法</th>
+      <th>结果</th>
+      <th>设备名</th>
+      <th>设备Model</th>
+      <th>系统版本</th>
+      <th>ADFA</th>
     </tr> 
   </thead>
   <tbody>
@@ -14,7 +46,11 @@
         <td><%= api_result.init_method %></td>
         <td><%= api_result.call_methods %></td>
         <td><%= api_result.result %></td>
-      </tr>
+        <td><%= api_result.device_name %></td>
+        <td><%= api_result.device_model %></td>
+        <td><%= api_result.device_os_version %></td>
+        <td><%= api_result.device_adfa %></td>
+       </tr>
     <% end %>
   </tbody>
 

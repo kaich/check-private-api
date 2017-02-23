@@ -19,9 +19,13 @@ ActiveRecord::Schema.define(version: 20151214023004) do
     t.string   "class_name"
     t.string   "init_method"
     t.string   "call_methods"
+    t.string   "device_name"
+    t.string   "device_model"
+    t.string   "device_os_version"
+    t.string   "device_adfa"
     t.string   "result"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
   end
 
 end
