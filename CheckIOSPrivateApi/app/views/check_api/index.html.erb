@@ -15,7 +15,8 @@
             <li value="device_adfa">ADFA</li>
         </ul>
       </div><!-- /btn-group -->
-      <%= text_field_tag :category, params[:category], type:"hidden", value:"call_methods" %>  
+      <%= text_field_tag :category, "call_methods", type:"hidden" %>  
+      <%= text_field_tag :user_name, params[:user_name], type:"hidden" %>  
       <%= text_field_tag :search, params[:search], class:'form-control', placeholder: "输入要查询的关键字"%>
       <span class="input-group-btn">
         <button type="submit" class="btn btn-primary">
