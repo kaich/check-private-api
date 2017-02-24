@@ -1,7 +1,7 @@
 class CheckApiController < ApplicationController
 
   def index
-    @api_results = ApiResult.search(params[:search],params[:user_name]).paginate(:page => params[:page], :per_page => 20)
+    @api_results = ApiResult.search(params[:category],params[:search],params[:user_name]).paginate(:page => params[:page], :per_page => 20)
   
     respond_to do |format|
       format.html # index.html.erb

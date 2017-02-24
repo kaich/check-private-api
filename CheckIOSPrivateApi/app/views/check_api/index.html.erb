@@ -3,20 +3,19 @@
   <%= form_tag check_api_index_path, :method => 'get' do %>
     <div class="input-group">
       <div class="input-group-btn">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action <span class="caret"></span></button>
-        <ul class="dropdown-menu">
-          <select name="category">
-            <option value="class_name">类名</option>
-            <option value="init_method">初始化方法</option>
-            <option value="call_methods">调用方法</option>
-            <option value="result">结果</option>
-            <option value="device_name">设备名</option>
-            <option value="device_name">设备Model</option>
-            <option value="device_os_version">系统版本</option>
-            <option value="device_adfa">ADFA</option>
-          </select>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">调用方法 <span class="caret"></span></button>
+        <ul class="dropdown-menu" name="category">
+            <li value="class_name">类名</li>
+            <li value="init_method">初始化方法</li>
+            <li value="call_methods">调用方法</li>
+            <li value="result">结果</li>
+            <li value="device_name">设备名</li>
+            <li value="device_name">设备Model</li>
+            <li value="device_os_version">系统版本</li>
+            <li value="device_adfa">ADFA</li>
         </ul>
       </div><!-- /btn-group -->
+      <%= text_field_tag :category, params[:category], type:"hidden", value:"call_methods" %>  
       <%= text_field_tag :search, params[:search], class:'form-control', placeholder: "输入要查询的关键字"%>
       <span class="input-group-btn">
         <button type="submit" class="btn btn-primary">

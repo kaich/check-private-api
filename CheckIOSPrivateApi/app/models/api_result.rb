@@ -1,9 +1,9 @@
 class ApiResult < ActiveRecord::Base
   serialize :result, JSON
 
-  def self.search(search, user_name)
-    if search
-      where(['call_methods LIKE ? And user_name = ?', "%#{search}%", "%#{user_name}%"])
+  def self.search(category,keyword,user_name)
+    if keyword && category
+      where(["user_name = '%s', '%s' = '%s'", user_name, category,keyword])
     else
       all 
     end
