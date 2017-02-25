@@ -5,7 +5,7 @@ class ApiResult < ActiveRecord::Base
     if keyword && category && user_name 
       where(["user_name = '%s' and %s like '%s'", user_name, category,keyword])
     else
-      all 
+      where(["user_name = '%s'", user_name])
     end
   end
 
