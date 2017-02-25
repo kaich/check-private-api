@@ -51,7 +51,7 @@ class CheckApiController < ApplicationController
   end
 
   def mobile_api_result
-    @api_result = ApiResult.find(params[:id])
+    @api_result = ApiResult.find(params[:id]).dup
     @api_result.result = mobile_api_params[:result]
     @api_result.device_name = mobile_api_params[:device_name]
     @api_result.device_model = mobile_api_params[:device_model]
