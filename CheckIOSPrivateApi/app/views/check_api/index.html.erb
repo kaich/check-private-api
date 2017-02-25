@@ -37,6 +37,7 @@
       <th>设备Model</th>
       <th>系统版本</th>
       <th>ADFA</th>
+      <th>操作</th>
     </tr> 
   </thead>
   <tbody>
@@ -50,11 +51,15 @@
         <td><%= api_result.device_model %></td>
         <td><%= api_result.device_os_version %></td>
         <td><%= api_result.device_adfa %></td>
+        <td><%= link_to '删除', check_api_path(api_result, user_name: params[:user_name]), method: :delete ,class:"btn btn-danger" %></td>
        </tr>
     <% end %>
   </tbody>
 
 </table>
+<div class="text-center">
+  <%= will_paginate @api_results, renderer: BootstrapPagination::Rails %>
+</div>
 
 
  <%= link_to "返回主页" , edit_check_api_path(@api_results.first) ,class:"btn col-md-4 col-md-offset-4" %>

@@ -87,6 +87,17 @@ class CheckApiController < ApplicationController
   end
 
 
+  def destroy
+    @api_result = ApiResult.find(params[:id])
+    @api_result.destroy
+  
+    respond_to do |format|
+      format.html { redirect_to("/check_api?user_name=#{params[:user_name]}") }
+      format.xml  { head :ok }
+    end
+  end
+
+
  private
   def api_params
       params.require(:api_result).permit(:user_name , :class_path , :class_name, :init_method, :call_methods, :result)
