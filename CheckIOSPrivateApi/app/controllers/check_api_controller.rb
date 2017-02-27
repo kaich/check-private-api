@@ -14,7 +14,20 @@ class CheckApiController < ApplicationController
   end
 
   def create
-    @api_result = ApiResult.new(api_params)
+    @api_result = ApiResult.find_by(user_name: api_params[:user_name])
+    if !@api_result
+      @api_result = ApiResult.new(api_params)
+    else 
+      @api_result.result = ""
+      @api_result.device_name = ""
+      @api_result.device_model = ""
+      @api_result.device_os_version = ""
+      @api_result.device_adfa = ""
+      @api_result.device_adfa = api_params[:class_path]
+      @api_result.device_adfa = api_params[:class_name]
+      @api_result.device_adfa = api_params[:init_method]
+      @api_result.device_adfa = api_params[:call_methods]
+    end
       
     respond_to do |wants|
       if @api_result.save
@@ -79,7 +92,7 @@ class CheckApiController < ApplicationController
   end
   
   def api_info
-    @api_result = ApiResult.where(user_name:params[:name]).order(created_at: :desc).first
+    @api_result = ApiResult.where(user_name:params[:name]).order(created_at: :asc).first
   
     respond_to do |format|
       format.json { render json: @api_result }

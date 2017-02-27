@@ -61,5 +61,6 @@
   <%= will_paginate @api_results, renderer: BootstrapPagination::Rails %>
 </div>
 
-
- <%= link_to "返回主页" , edit_check_api_path(@api_results.first) ,class:"btn col-md-4 col-md-offset-4" %>
+<% if @api_results.length > 0 %>
+  <%= link_to "返回主页" , edit_check_api_path(@api_results.first) ,class:"btn col-md-4 col-md-offset-4" %>
+<% end %>
