@@ -16,17 +16,13 @@ module Checkapi
           options[:filename] = value
         end
 
-        opts.on('-k A,B', '--keyword A,B', Array, 'List of search keywords') do |value|
-          options[:keywords] = value
-        end
-
-        opts.on('-p USERNAME', '--push USERNAME', 'push record to server') do |value|
-          options[:push] = value
-        end
+        # opts.on('-k A,B', '--keyword A,B', Array, 'List of search keywords') do |value|
+        #   options[:keywords] = value
+        # end
 
       end.parse!
 
-
+# And model
       keywords = options[:keywords]
       keywords ||= {}
 

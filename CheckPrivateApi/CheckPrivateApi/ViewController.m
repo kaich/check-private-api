@@ -364,14 +364,21 @@
         //设置参数
         NSInteger paramIndex = 0;
         for (NSDictionary * paramDic in params) {
-           void * arg ;
-           arg = [self getValueWithParamInfo:paramDic];
-           [invocation setArgument:arg atIndex:2 + paramIndex];
+           id arg = [self getValueWithParamInfo:paramDic];
+           [invocation setArgument:&arg atIndex:2 + paramIndex];
            paramIndex ++;
         }
         
+        Method method = nil;
+        if(isClassMethod)
+        {
+            method = class_getClassMethod([target class] , selector);
+        }
+        else
+        {
+            method = class_getInstanceMethod([target class] , selector);
+        }
 
-        Method method = class_getInstanceMethod([target class] , selector);
         char returnType[ 256 ];
         method_getReturnType(method, returnType, 256 );
         
@@ -406,7 +413,7 @@
     else if(strcmp(retType, @encode(id)) == 0 || strcmp(retType, @encode(void)) == 0 || strcmp(retType, "") == 0){
         return (__bridge id)(data);
     }
-    else if(strcmp(retType, "i") == 0 || strcmp(retType, "I") == 0 || strcmp(retType, "s") == 0 || strcmp(retType, "S") == 0 || strcmp(retType, "c") == 0 || strcmp(retType, "C") == 0)
+    else if(strcmp(retType, "i") == 0 || strcmp(retType, "I") == 0 || strcmp(retType, "s") == 0 || strcmp(retType, "S") == 0 || strcmp(retType, "c") == 0 || strcmp(retType, "C") == 0 || strcmp(retType, "B") == 0)
     {
         NSInteger result = (NSInteger) data;
         return [NSString stringWithFormat:@"%ld",(long)result];
@@ -432,51 +439,51 @@
     }
 }
 
--(void *) getValueWithParamInfo:(NSDictionary *) paramDic
+-(id) getValueWithParamInfo:(NSDictionary *) paramDic
 {
-    void * arg ;
+    id arg = nil;
     NSString * type = paramDic[@"type"];
     NSString * value = paramDic[@"value"];
     
     if ([type isEqualToString: @"int"]) {
-        arg = (__bridge void *)(@([value intValue]));
+        arg = @([value intValue]);
     }
     else if([type isEqualToString:@"NSInteger"])
     {
-        arg = (__bridge void *)(@([value integerValue]));
+        arg = @([value integerValue]);
     }
     else if([type isEqualToString:@"float"] || [type isEqualToString:@"CGFloat"])
     {
-        arg = (__bridge void *)(@([value floatValue]));
+        arg = @([value floatValue]);
     }
     else if([type isEqualToString:@"double"])
     {
-        arg = (__bridge void *)(@([value doubleValue]));
+        arg = @([value doubleValue]);
     }
     else if([type isEqualToString:@"long long"])
     {
-        arg = (__bridge void *)(@([value longLongValue]));
+        arg = @([value longLongValue]);
     }
-    else if([type isEqualToString:@"NSArray"] || [type isEqualToString:@"NSMutableArray"] || [type isEqualToString:@"NSDictionary"] || [type isEqualToString:@"NSMutableDictionary"] || [value hasPrefix:@"["] || [value hasPrefix:@"{"])
+    else if([type containsString:@"NSArray"] || [type containsString:@"NSMutableArray"] || [type containsString:@"NSDictionary"] || [type containsString:@"NSMutableDictionary"] || [value hasPrefix:@"["] || [value hasPrefix:@"{"])
     {
         NSData * jsonData = [value dataUsingEncoding:NSUTF8StringEncoding];
         NSError * error = nil;
         id jsonObject = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableLeaves error:&error];
-        arg = (__bridge void *)(jsonObject);
+        arg = jsonObject;
     }
-    else if([type isEqualToString:@"NSNumber"])
+    else if([type containsString:@"NSNumber"])
     {
         NSNumber * numberValue = @([value doubleValue]);
-        arg = (__bridge void *)(numberValue);
+        arg = numberValue;
     }
-    else if([type isEqualToString:@"NSURL"])
+    else if([type containsString:@"NSURL"])
     {
         NSURL * url = [NSURL URLWithString:value];
-        arg = (__bridge void *)(url);
+        arg = url;
     }
     else
     {
-        arg = (__bridge void *)(value);
+        arg = value;
     }
     
     return  arg;
