@@ -46,7 +46,14 @@
 
 -(NSArray *) parseCallMethods:(NSString *) methodsString
 {
-    return  [methodsString componentsSeparatedByString:@";"];
+    NSArray * tmpMethods = [methodsString componentsSeparatedByString:@";"];
+    NSMutableArray * finalMethods = [[NSMutableArray alloc] init];
+    for(NSString * method in tmpMethods) {
+        NSString * finalMethod = [NSString stringWithFormat:@"%@;",method];
+        [finalMethods addObject:finalMethod];
+    }
+    
+    return finalMethods;
 }
 
 @end
