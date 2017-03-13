@@ -92,7 +92,15 @@
     }
     else
     {
-        NSLog(@"-[%@ performSelector:@selector(%@)] shouldn't be used. The selector doesn't return an object or void", [self class], NSStringFromSelector(aSelector));
+        NSString * message = [NSString stringWithFormat:@"-[%@ performSelector:@selector(%@)] shouldn't be used. The selector doesn't return an object or void", [self class], NSStringFromSelector(aSelector)];
+        NSLog(@"%@",message);
+        
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示" message:message preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * action) {}];
+        [alert addAction:defaultAction];
+        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
+        
         return nil;
     }
 #pragma clang diagnostic pop
